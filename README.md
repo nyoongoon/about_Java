@@ -31,6 +31,14 @@ Collections.synchronizedList(List\<T\> list);
 - 또다른 단점은 데이터가 메모리에 산재해 저장되기 때문에 참조자를 위한 추가적 메모리 할당이 필요.
 <br/><br/><br/><br/><br/>
 
+
+# HashSet VS HashTable
+- https://d2.naver.com/helloworld/831311
+
+
+<br/><br/><br/><br/><br/>
+
+
 # String
 
 - 자바의 문자열은 String 클래스의 인스턴스로 관리 됨. 소스 상에서 문자열 리터럴(데이터 값)은 String 객체로 자동 생성되지만, String 클래스의 생성자를 이용해서 직접 String객체를 생성할 수도 있다. 
