@@ -1,9 +1,11 @@
 # about_Java
 Java를 공부하며 알게 된 것을 기록하는 저장소입니다.
 
-<img width="1069" alt="스크린샷 2022-07-13 오전 9 20 13" src="https://user-images.githubusercontent.com/68639744/178623357-ace870bb-3fd9-4d53-9e6d-1189a8d166ce.png">
 
 # ArrayList VS LinkedList 
+
+<img width="1069" alt="스크린샷 2022-07-13 오전 9 20 13" src="https://user-images.githubusercontent.com/68639744/178623357-ace870bb-3fd9-4d53-9e6d-1189a8d166ce.png">
+
 - java에서 기본형 또는 인스턴스를 저장하기 위해 보통 배열을 사용.
 - 하지만 배열의 초기길이를 지정해야 하며, 생성된 배열의 길이는 동적으로 변경할 수 없음.
 - 이에 대한 대안으로 List인터페이스를 구현한 ArrayList와 LinkedList를 사용.
