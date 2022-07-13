@@ -16,11 +16,15 @@ Collections.synchronizedList(List\<T\> list);
 ```
 
 ## ArrayList
+<img width="257" alt="image" src="https://user-images.githubusercontent.com/68639744/178623507-2aa3a3c2-3499-4a01-9d40-05997a840334.png">
+
 - 내부적으로 데이터를 배열에서 관리하며 데이터의 추가, 삭제를 위해 임시 배열을 생성해 데이터를 복사.
 - -> 대량의 데이터 추가/삭제 하는 경우에는 데이터 복사가 많이 일어나게 되어 성능저하. 최악 O(n)
 - -> 반면 각 데이터 인덱스 가지므로 한번에 참조가 가능해 데이터 검색에 유리 O(1)
 
 ## LinkedList
+<img width="496" alt="image" src="https://user-images.githubusercontent.com/68639744/178623624-4ca503c5-858b-4253-8a0f-fece21b45608.png">
+
 - 데이터를 저장하는 각 노드가 이전 노드와 다음 노드의 상태만 알고 있음.
 - -> 데이터 복사가 없어 데이터의 추가, 삭제에 유리 O(1)
 - -> 데이터 검색시 처음부터 순회해야하므로 성능상 불리. 최악 O(n)
