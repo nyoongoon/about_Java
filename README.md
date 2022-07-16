@@ -86,3 +86,217 @@ while(st.hasMoreTokens()){
 - StringBuffer는 동기화 적용되어 스레드에 안전.
 - StringBuilder는 동기화 x. 단일 스레드환경에서만 사용해야함.
 <br/><br/><br/><br/><br/>
+
+
+
+
+* * * 
+
+# Part 01 - Java 기초
+# 코딩테스트 유형 (simple)
+## 1. 정렬
+- 정렬 문제 단독으로 나오는 경우 거의 없음.
+- 풀이를 위한 사전 과정. 
+- 버블, 선택, 퀵, 합병, 우선순위 큐 ...
+
+## 2. 탐색
+- 주어진 데이터에서 특정 값 찾기 (2차원/3차원 데이터에서 인접한 /가능한 경로 찾기)
+- 단순 풀이로 접근 시 대부분 시간초과로 실패
+- 완전, 이진, 투 포인터, BFS, DFS ...
+
+## 3. 부분 문제의 합 - 분할정복/DP 
+- 최대 값 찾기 / 부분 수열의 최대 길이 / 0-1Knapsack 문제 ...
+- 단순 반복, 조건문 나열로는 풀기 복잡한 문제
+- 해귀함수를 통한 작은 문제의 반복적 해결 구조 또는 계산 결과의 재사용
+- 분할정복 , DP
+
+## 4. 최적선택 - 그리디
+- Activity Selection / 거스름돈
+- 특정 조건 만족 시 빠르게 문제를 해결할 수 있는 방법
+- 최적해가 아닌 근사치를 얻을 수도 있으므로 사용 시 주의 필요
+- 그리디 
+
+## 5. 기타 시뮬레이션
+- 조건에 따른 문자열 입력/삭제/수정 문제
+- 문제의 요구사항을 잘 읽고 해결하는 문제
+- 특정 알고리즘 분류로 매핑되지 않는 경우 많음 
+
+
+# 3-3 학습환경 구성 - Tool 사용
+- 디버깅 사용방법 
+- 중단점, 
+- Step over: 한줄 씩 이동. 함수를 타고 들어가진 않음. 
+- Step Into: 하위구조를 타고 들어감. 
+- Step Out: 들어왔던 하위구조를 나감 
+
+# 자바
+## 자바 프로그램 작성 실행 과정
+- 자바소스코드 - 자바컴파일러 - 바이트 코드 - jvm - 실행
+# 변수와 자료형
+- 변수 : 데이터를 저장하는 메모리 공간에 붙여준 이름
+# 자료형
+## 숫자형
+- 정수 / 실수 / 2진수, 8진수, 16진수
+```java
+//2진수 0b~
+int numBase2 = 0b1100;
+System.out.println("0b" + Integer.toBinaryString(numBase2)); //2진수로출력
+//8진수 0~
+int numBase8 = 014;
+System.out.println("0" + Integer.toOctalString(numBase8));//8진수로출력
+//16진수 0x~
+int numBase16 = 0xC;
+System.out.println("0b" + Integer.toHexString(numBase16));//16진수로출력
+```
+
+- 실수
+```java
+float floatNum = 1.23f; //뒤에 f 붙이기
+double doubleNum = 1.23;
+```
+
+## 문자열
+- equals(), indexOf(), replace(), substring(), toUpperCase()
+```java
+String s3 = "Hi";
+String s4 = "Hi";
+String s5 = new String("Hi");
+System.out.println(s3.equals(s4)); //true
+System.out.println(s3 == s4); //true
+System.out.println(s3.equals(s5)); //true
+System.out.println(s3 == s5); // false
+```
+
+## 자료형: StringBuffer
+- 문자열을 자주 추가하거나 변경할 때 사용하는 자료형
+- 문자열은 데이터가 변경될 때마다 객체가 변하지만, StringBuffer는 객체 안에서 변경됨 ..?
+```java
+StringBuffer sb1 = new StringBuffer("HelloWorld!"); 
+sb1.append("1234"); 
+```
+- append(), insert(), substring()
+
+## 자료형 : 배열
+## 자료형 : 리스트
+- add(), get(), size(), remove(), clear(), sort(), contains()
+```java 
+ArrayList l1 = new ArrayList(); //아무 자료형이나 넣을 수 있었네..??
+l1.add(1);
+l1.add("hello");
+l1.add("world!");
+System.out.println("l1 == " + l1); // l1 = [1, "hello", "world!"]
+
+l1.add(0, 1); // (index, element)
+System.out.println("l1 == " + l1); // l1 = [1, 1, "hello", "world!"]->추가됨
+
+//remove
+l1.remove(0); // 인덱스 0번 지우기
+l1.remove(Integer.valueOf(2)); // int 2 값 찾아서 지우기 
+
+//clear
+l1.clear() // 모든 데이터 지우기 
+
+//sort
+l1.sort(Comparator.naturalOrder()); //오름차순
+l1.sort(Comparator.reverseOrder()); //내림차순
+
+//contains(element) //데이터 존재 유무 true || false 
+```
+## 자료형 : 맵
+- put(), get(), size(), remove(), containsKey()
+```java
+map.remove("key") // 값 있었으면 출력 || 없었으면 null 출력 
+```
+## 자료형 : 제네릭스
+- 자료형을 명시적으로 지정
+- 제한적일 수 있지만 안정성을 높여주고 형변환을 줄여줌. 
+- ArrayList, Map 등 제네릭 사용안하면 하나의 자료구조에 다양한 타입 저장가능. 
+
+
+# 연산자
+- 단항 연산자, 이항 연산자, 삼항 연산자.
+- 대입 연산자
+- 부호 연산자
+- 산술연산자
+- 증가/감소 연산자 
+- 관계 연산자
+- 논리 연산자 
+- 복합 대입 연산자 
+
+## 2진법 비트연산자
+- 2의 보수 : 2의 제곱수에서 뺴서 얻은 이진수 
+- 자리 올림이 필요한 만큼의 수. 
+- ex)2진수 3의 2의 보수 : 11 -> 01 
+- => 11에서 자리올림(100)이 되려먼 01을 더해야함.
+- 2의 보수로 음수 표현을 하기도 함 (자릿수를 올려서 0 비트로 만들기)
+
+## 비트연산자
+- 기본연산자 -> && , || 
+- 비트연산자 -> & , | 
+- & : 두 개의 비트가 모두 1인경우에만 1
+- | : 두 개의 비트값 중 하나라도 1이면 1
+- ^ (XOR 연산자) : 같으면 0 다르면 1 
+- ~ (반전연산자) : 0을 1으로, 1을 0으로 
+ 
+``` java
+int num1 = 5;
+result = ~num1;
+System.out.println("result = " + result); // -6
+System.out.printf("%04d\n", Integer.parseInt(Integer.toBinaryString(num1)));
+// => 0101
+System.out.printf("%s\n", Integer.parseInt(Integer.toBinaryString(result)));
+// => (앞에 1 28개)1010 ==> 32비트에 나머지 앞의 자리가 1(부호)로 전부 바뀌었음 
+```
+- 비트이동연산자 (\<\<, \>\>, \>\>\>)
+- \<\< :비트를 왼쪽으로 이동 
+- 3\<\<1  =>  0011 => 0110 (\*2의 효과)
+- \>\> : 비트를 오른쪽으로 이동
+- 3\>\>1 => 0011 => 0001  (/2의 효과)
+- \>\>\> : 연산자 
+- 비트를 오른쪽으로 이동(부호비트 상관없이 0으로 채움) 
+```java
+numA = -5;
+result = numA >> 1;
+System.out.printf("%s\n", Integer.toBinaryString(numA));
+// => (1이 28개) 1011
+System.out.printf("%s\n", Integer.toBinaryString(result));
+// => (1이 28개) 1101 (부호연산 그대로)
+result = numA >>> 1;
+System.out.printf("%s\n", Integer.toBinaryString(result));
+// => (0하나) (1이 27개)1101 (부호연산 0으로)
+```
+
+# 조건문 
+## if, case
+
+## for, while
+
+# 다차원 배열
+
+# 클래스와 객체 1
+- 객체를 정의하는 설계도. 
+## 객체(Object)
+- 실체
+## 인스턴스
+- 클래스와 객체의 관계
+- 클래스로부터 객체를 선언. 
+- 어떤 객체는 어떤 클래스의 인스턴스. 
+## this, this()
+- this => 객체 자신을 의미
+- this() => 생성자
+
+
+# 클래스와 객체 2
+## 오버로딩
+- 한 클래스 내에서 같은 이름의 메소드를 여러 개 정의
+### 오버로딩의 조건
+- 메소드의 이름이 같아야함
+- 매개변수의 개수 또는 타입이 달라야함. 
+- 리턴타입의 차이만으로 오버로딩되지 않음. 
+## 접근제어자
+- 클래스의 변수나 메소드의 접근에 제한을 두는 키워드
+### 접근제어자 종류
+- private : 해당 클래스에서만 접근 가능
+- public : 어디서든 접근 가능
+- default : 해당 패키지 내에서만 접근 가능
+- protected: 해당 패키지 및 상속받은 클래스에서 접근 가능. 
