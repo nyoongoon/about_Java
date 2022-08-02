@@ -88,7 +88,13 @@ while(st.hasMoreTokens()){
 <br/><br/><br/><br/><br/>
 
 
+# 캡슐화
 
+캡슐화란?
+
+캡슐화(encapsulation)는 객체 지향 프로그래밍에서 다음 2가지 측면이 있습니다.
+객체의 속성(data fields)과 행위(메서드, methods)를 하나로 묶는다.
+실제 구현 내용 일부를 외부에 감추어 은닉한다.
 
 * * * 
 * * * 
