@@ -112,6 +112,10 @@ while(st.hasMoreTokens()){
 1. reflection 관련 클래스들
 
 자바 API에는 reflection이라는 패키지가 있다. 이 패키지에 있는 클래스들을 사용하면 JVM에 로딩되어 있는 클래스와 메서드를 정보를 읽어 올 수 있다. 주요 클래스의 종류와 각 클래스에서 제공되는 메서드에는 어떤 것들이 있는지 간단히 알아보자.
+
+
+
+
 * * * 
 * * * 
 * * * 
@@ -119,7 +123,6 @@ while(st.hasMoreTokens()){
 
 
 
-# Part 01 - Java 기초
 # 코딩테스트 유형 (simple)
 ## 1. 정렬
 - 정렬 문제 단독으로 나오는 경우 거의 없음.
@@ -328,22 +331,814 @@ System.out.printf("%s\n", Integer.toBinaryString(result));
 - default : 해당 패키지 내에서만 접근 가능
 - protected: 해당 패키지 및 상속받은 클래스에서 접근 가능. 
 
-public class KBBank implements Bank{
+## Static
+- 변수나 메소드의 특성을 바꾸는 키워드
+### Static 특징
+- 메모리에 한 번만 할당됨
+- 즉, Static 변수나 메소드는 공유되는 특성을 가짐
+- 객체가 만들어지기 전에(프로그램 시작 시) 클래스 변수, 클래스 메소드가 메모리에 할당되어 있음. 
+### Static 클래스 변수
+- 해당 클래스의 각 객체들이 값을 공유
+### Static 클래스 메소드
+- 객체를 생성하지 않아도 호출 가능. 
 
-	@Override
-	public void withDraw(int price) {
-		System.out.print("KB은행만의 인출 로직...");
-		if(price < Bank.MAX_INTEGER){
-			System.out.println(price+" 원을 인출한다.");	
-		}else{
-			System.out.println(price+" 원을 인출실패.");	
+``` java
+class Car{
+	static String name = "None";
+	String type;
+	Car(String name, String type){
+		this.name = name;
+		this.type = type;
+	}
+	public void printCarInfo(){
+		System.out.println("name: " + name);
+		System.out.println("type: " + type);
+	}
+	public static void getName(){
+		System.out.println("Car name: " + name);
+	}
+}
+
+public class Main{
+	public static void main(String[] args){
+		Car.getName(); //static은 객체 생성하지 않아도 이미 메모리에 올려져있음.
+		Car myCar1 = new Car("a", "sedan");
+		Car myCar2 = new Car("b", "suv");
+		myCar1.printCarInfo(); //name:b type:sedan
+		myCar2.printCarInfo(); //name:b type:suv ==> name은 static이라 공유됨!! 
+	}
+}
+```
+
+# 상속 
+- 부모 클래스의 필드와 메소드가 상속 됨
+- 생성자, 초기화 블록은 상속되지 않음
+- 자식클래스는 하나의 부모 클래스만 상속 가능. 
+- private, default 멤버를 자식 클래스에서 접근 불가.
+- default의 경우 내부 패키지의 자식 클래스는 가능. 
+## super, super()
+- super : 부모 클래스와 자식 클래스의 멤버 이름이 같을 때 구분하는 키워드
+- super() : 부모 클래스의 생성자 호출 
+
+## 오버라이딩
+- 부모클래스의 메소드를 자식클래스에서 재정의
+- 메소드 선언부 부모 클래스의 메소드와 동일해야함
+- **반환 타입에 한해서**,
+- 부모 클래스의 반환타입으로 변환할 수 있는타입으로 변경 가능
+- 부모 클래스의 메소드보다 접근제어자를 더 좁은 범위로 변경 불가
+- 부모 클래스의 메소드보다 더 큰 범위의 예외 선언 불가 
+
+# 다형성
+- 하나의 객체가 여러가지 타입을 가질 수 있는 것 
+- 부모클래스 타입의 참소변수로 자식 클래스 인스턴스 참조 
+## 타입변환 (업캐스팅, 다운캐스팅)
+```java
+// 타입 변환 Student extends Person
+Person pp1 = null;
+Student ss1 = null;
+
+Person pp2 = new Person();
+Student ss2 = new Student();
+Person pp3 = new Student(); // 업캐스팅(다형성)
+
+pp1 = pp2;
+pp1 = ss2;
+
+ss1 = ss2;
+// ss1 = pp2; 안됌
+// ss1 = pp3; 이대론 안되지만
+ss1 = (Student) pp3; // 다운캐스팅 이렇게 하면 가능 (원래 Student였는데 업캐스팅된 상태였음)
+
+```
+
+
+
+# 추상 클래스 & 추상 메소드 
+
+```java
+abstract class Person{
+	abstract void printInfo();
+}
+
+class Student extends Person{
+	public void printInfo(){
+		System.out.println("Student.printInfo");
+	}
+}
+
+public class Main{
+	public static void main(String[] args){
+		// 추상 클래스 사용
+		// Person p1 = new Person();
+		Student s1 = new Student();
+		s1.printInfo();
+
+		Person p2 = new Person(){ // 추상클래스 익명클래스를 통해 구현가능
+			@Override
+			void printInfo(){
+
+			}
+		};
+	}
+}
+```
+
+# 인터페이스
+- 다중상속처럼 사용할 수 있는 기능
+- 추상메소드와 상수만으로 이루어짐. 
+```java
+접근제어자 interface 인터페이스 이름{
+	public static final 타입 상수입름 = 값;
+	public abstract 반환타입 메소드이름(매개변수);
+}
+```
+
+# 내부클래스
+## 특징
+- 내부 클래스에서 외부 클래스 멤버에 접근 가능
+- 외부에서는 내부 클래스 접근 불가
+## 종류
+- 인스턴스 클래스
+- 정적 클래스
+- 지역 클래스
+- 익명 클래스
+
+### 익명 클래스
+- 이름을 가지지 않는 클래스
+- 선언과 동시에 객체 생성
+- 일회용 클래스
+```java
+클래스이름 참조변수이름 = new 클래스이름(){
+...
+};
+```
+
+# 입출력
+## 콘솔 입력
+```java
+System.in.read()
+InputStreamReader reader = ...
+BufferedReader br = ...
+Scanner ...
+```
+
+- 예시 코드
+```java
+//System.in
+int a = System.in.read() - '0'; //System.in.read()=>하나의 캐릭터 읽음
+System.out.println("a = " + a);
+System.in.read(new byte[System.in.available()]); // 입력스트림에 남아있는 개수 만큼 바이트만큼 읽어서 소진 (엔터키값 등)
+
+//InputStreamReader
+InputStreamReader reader = new InputStreamReader(System.in); //여러 글자 받음
+char[] c = new char[3]; //여러 데이터 받기 때문에 그 만큼의 배열 길이 필요
+reader.read(c); // 여기서 받음
+System.out.println(c); //출력
+
+//BufferedReader
+//위의 2개가 합쳐진 개념. 
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String s1 = br.readLine(); // 여기서 받음.
+System.out.println("s1 = " + s1);
+
+//Scanner 
+Scanner sc = new Scanner(System.in);
+System.out.println(sc.next()); // 데이터 하나 받기 => 엔터키 소진 필요
+sc.nextLine(); //엔터키 소진 
+
+System.out.println(sc.nextInt()); //정수 값 받기 - 다른타입 에러 
+
+System.out.println(sc.nextLine()); //가장 많이 사용 ! 
+
+```
+
+## 콘솔 출력 
+```java
+System.out.println(...);
+System.out.print(...);
+System.out.printf(...);
+```
+- printf 예시
+```java
+String s = "자바";
+int number = 3;
+System.out.println(s+ "는 언어 선호도 " + number +"위 입니다.");
+System.out.printf("%는 언어 선호도 %d위 입니다.\n", s, number);
+
+// 서식문자 
+// %d 정수형
+// %o 8진수
+// %x 16진수 
+// %f 실수 System.out.printf("%f\n", 5.2f);
+// %c 문자
+// %s 문자열 
+
+// 여백
+System.out.printf("%5d\n", 123); // "  123"
+System.out.printf("%-5d\n", 123); // "123  "
+
+// 소숫점 자리수 표현
+System.out.printf("%.2f\n", 1.12645f); // 1.13 // 마지막자리 반올림한값 !!
+```
+
+# 파일 입출력 
+## 파일 입력
+- 입출력 방식 중 파일로부터 입력 받는 방법 
+```java
+FileInputStream ...
+BufferedReader ...
+```
+
+```java
+// 파일 입력
+BufferedReader br = new BufferedReader(new FileReader("./memo.txt"));
+//String line = br.readLine(); //한줄 씩 읽기 
+
+while(true){
+	String line = br.readLine();
+	if(line == null){
+		break;
+	}
+	System.out.println(line);
+}
+br.close();
+```
+
+## 파일 출력(파일 쓰기)
+- 입출력 방식 중 파일로 출력(쓰기)하는 방법 
+```java
+FileOutputStream ...
+FileWriter ...
+PrintWriter ...
+```
+
+- 예시
+``` java
+// 1. 파일(로) 출력(쓰기)
+// FileWriter
+FileWriter fw = new FileWriter("./memo.txt");
+String memo = "헤드 라인\n";
+fw.wirte(memo);
+
+memo = "1월 1일 날씨 맑음\n";
+fw.write(memo);
+
+fw.close();
+
+//PritWiter 
+PrintWriter pw = new PrintWriter("./memo.txt");
+memo = "헤드 라인";
+pw.println(memo); //ln자동추가
+memo = "1월 1일 날씨 맑음";
+pw.println(memo); //ln자동추가
+
+pw.close();
+
+
+// 파일 이어 쓰기
+FileWriter fw2 = new FileWriter("./memo.txt", true); //append:  true
+memo = "1월 2일 날씨 완전 맑음\n";
+fw2.write(memo);
+fw2.close();
+
+
+PrintWriter pw2 = new PrintWriter(new FileWriter("./memo.txt", true));
+memo = "1월 3일 날씨 또 맑음!";
+pw2.println(memo);
+pw2.close();
+``` 
+
+
+# 예외 처리
+## 예외 (Exception)
+- 정상적이지 않은 Case;
+## throw, throws
+- throw : 예외를 발생시킴
+- throws : 예외를 전가시킴. 
+``` java
+...func(){
+	throw new Exception(); // 발생 !!! // @예외 발생시킴(동사원형)
+}
+...func() throws Exception{ // 전가 !!! //func()가 @예외 발생시킨다.(3인칭단수)
+	...
+}
+``` 
+
+- 커스텀 예외
+```java
+//RuntimeException 상속 
+class CustomException extends RuntimeException{}
+```
+- 예시
+```java
+class NotTenException extends RuntimeException{}
+
+public class Main{
+	public static boolean checkTenWithException(int ten){ // 예외 발생 예시 !!!
+		try{
+			if(ten != 10){
+				throw new NotTenException(); //예외 이곳에서 처리 !!!
+			}
+		}catch(NotTenException e){
+			System.out.println("e == " + e); //위의 사항 여기서 잡힙
+			return false;
 		}
+		return true;
 	}
 
-	@Override
-	public void deposit(int price) {
-		System.out.println("KB은행만의 입금 로직..."+price+" 원을 입금한다.");
-	
+	public static boolean checkTenWithThrows(int ten) throws NotTenException{ // 예외 전가 예시 !!!
+		if(ten != 10){
+			throw new NotTenException(); // 예외가 발생하면 일반 밖으로 보냄
+		}
+		return true;
 	}
+
+	public static void main(String[]args){
+		// 예외 발생 예제인 경우 예외가 함수 안에서 처리됨 !!!
+		Main.checkTenWithException(9); //false 리턴 //e == NotTenException 출력됨.
+
+		//예외 전가 예제인 경우 예외가 밖으로 나와서 호출한 곳에서 처리 해주어야함 !!!
+
+		try{
+			checkTenWithThrows(9);	//false !!!
+		}catch(NotTenException e){
+			System.out.println("e == " + e); //e == NotTenException 출력됨.
+		}
+		
+	}
+}
+```
+
+# 컬렉션 프레임워크
+- 여러 데이터를 편리하게 관리할 수 있게 만들어 놓은 것.
+- 자료구조 및 알고리즘을 구조화
+## 대표 인터페이스
+- List 인터페이스, Set 인터페이스, Map 인터페이스.  
+
+## List 인터페이스
+- 순서가 있는 데이터의 집합
+- 데이터 중복 허용
+- 대표 구현 클래스 : ArrayList, LinkedList, Vector 
+
+## Set 인터페이스
+- 순서가 없는 데이터의 집합
+- 데이터의 중복 허용하지 않음
+- 대표 구현 클래스 : HashSet, TreeSet 
+
+## Map 인터페이스
+- 키와 값의 쌍으로 이루어진 데이터 집합
+- 순서 유지하지 않음
+- 대표 구현 클래스 : HashMap, TreeMap 
+
+### ArrayList
+```java
+list.size()
+list.contains(value) /// 값의 유무 
+list.indexOf(value) // 값의 인덱스
+```
+
+### LinkedList
+``` java
+list.addFirst(value)
+list.addLas(value)
+list.removeFirst()
+list.removeLast()
+```
+
+### HashSet
+```java
+set.add(1);
+set.add(2);
+set.add(3);
+System.out.println(set); // set = [1, 2, 3] //toString()오버라이드 ..?
+```
+
+### TreeSet
+```java
+set.add(10);
+set.add(5);
+set.add(15);
+System.out.println(set); // set = [5, 10, 15] // 정렬되어 출력됨
+set.first();
+set.last();
+set.lower(10); //5
+set.higher(10); //15
+```
+
+### HashMap
+```java
+System.out.println(map); // map {1="kiwi", 2="apple", 3="mango"}
+```
+
+### TreeMap
+```java
+map.put(10, "kiwi");
+map.put(5, "apple");
+map.put(15, "mango");
+System.out.println(map); // map = {5=apple, 10=kiwi, 15=mongo} // 정렬되어 출력됨 
+System.out.println(map.firstEntry()); // 5=appler
+System.out.println(map.firstKey()); // 5
+System.out.println(map.lastEntry()); //15=mango
+System.out.println(map.lastKey()); // 15
+System.out.println(map.lowerEntry(10)); //5=apple
+System.out.println(map.higherKey(10)) // 15=mango
+```
+
+### 컬렉션 프레임워크 예제 - 로또 번호 만들기
+```java
+public static void main(String[] args){
+	HashSet set = new HashSet();
+	for(int i = 0; set.size() < 6; i++){
+		int num = (num)(Math.random() * 45) + 1; //Math.random() 
+		set.add(num); // 중복되면 사이즈 증가하지 않으므로 분기문없이 for문의 조건문으로 충분함.
+	}
+	LinkedList list = new LinkedList(set); // set을 그냥 LinkdList에 넣어서 생성했음 !!! 
+	Collections.sort(list);
 
 }
+```
+
+# 람다식
+- 메소드 대신 하나의 식으로 표현하는 것
+- 익명 함수
+```
+public int sum(int x, int y){ // 일반 함수
+	return x + y;
+}
+(int x, int y) -> {return x + y;}
+```
+
+## 장점
+- 코드 간결
+- 코드 가독성 높아짐
+- 생산성 높아짐
+## 단점
+- 재사용 불가능(익명)
+- 디버깅 어령무
+- 재귀함수로는 맞지 않음 (이름이 없기 때문)
+
+## 람다식 예시
+```java
+interface ComputeTool{
+	public abstarct int compute(int x, int y);
+
+	//public abstarct int compute2(int x, int y); // 추상메소드 2개일 경우에 람다 사용 불가 (기본 익명 클래스는 그냥 오버라이딩하면 가능)
+}
+public class Main{
+	public static void main(String[] args){
+		ComputeTool cTool1 = new ComputTool(){ // 기본 익명 클래스
+			@Override
+			public int compute(int x, int y){
+				return x + y;
+			}
+		};
+		System.out.println(cTool.compute(1, 2)); //기본 사용
+
+		// 람다식 !!!
+		CoumputTool cTool2 = (x, y) -> { x + y}; // 위의 기본 익명 클래스와 같은 기능 
+		System.out.println(cTool2.compute(1, 2)); // 람다 사용. 람다에서 메소드명 지정 안해줘도 인터페이스의 메소드 명을 사용할 수 있음. 
+	}
+}
+```
+
+# 스트림 
+- 배열, 컬렉션 등의 데이터를 하나씩 참조하여 처리 가능한 기능
+- for문의 사용을 중려 코드를 간결하게 함.
+- 크게 3가지로 구성
+- Stream 생성
+- 중개 연산
+- 최종 연산
+- 데이터소스 객체.Stream생성().중개연산().최종연산();
+## 스트림 생성
+- 배열 스트림
+```java
+String[] arr = new String[]{"a", "b", "c"}
+Stream stream = Array.Stream(arr);
+```
+- 컬렉션 스트림 
+```java
+ArrayList list = new ArrayList(Arrays.asList(1,2,3));
+Stream stream = list.stream();
+```
+## 스트림 중개연상
+- Filtering
+- filter 내부 조건에 참인 요소들을 추출 
+```java
+IntStream intStream = IntStream.range(1, 10).filter(n->n%2==0);
+```
+- Mapping
+- map 안의 연산을 요소별로 수행 
+```java
+IntStream intStream = IntStream.range(1,10).map(n -> n+1);
+```
+
+## 스트림 최종연산
+- Sum, Average
+```java
+IntStream.range(1, 5).sum()
+IntStream.range(1, 5).average().getAsDouble()
+```
+- min, max
+```java
+IntStream.range(1, 5).min().getAsInt();
+IntStream.range(1, 5).max().getAsInt();
+```
+
+## 예제
+- 스트림 생성 예시
+```java
+// 배열 스트림
+Stream stream1 = Arrays.stream(arr);
+stream1.forEach(System.out::println);
+
+// 컬렉션 스트림
+Stream stream2 = list1.stream();
+        //stream2.forEach(System.out::println); -> 스트림 최종 연산 이후에 더 작업할 수 없음 !
+stream2.forEach(num -> System.out.println("num = " + num));
+
+// 스트림 builder
+Stream StreamBuilder = Stream.builder().add(1).add(2).add(3).build();
+streamBuilder.forEach(System.out::println);
+
+// 스트림 generate
+Stream streamGenerator = Stream.generate(()->"abc").limit(3); // 3번반복
+streaGenerator.forEach(System.out::println);
+
+// 스트림 iterate
+Stream streamIterate = Stream.iterate(10, n -> n * 2).limit(3);
+streamIterate.forEach(System.out::println);
+
+// 기본타입 스트림
+IntStream intStream = IntStream.ranget(1, 5);
+intStream.forEach(System.out::println);
+```
+- 스트림 중개 연산 예시
+```java
+// Filtering(필터링)
+IntStream intSteam2 = IntStream.range(1, 10).filter(n -> n % 2 == 0); //참인경우찾기
+intStream2.forEach(System.out::println);
+
+// Mapping(매핑)
+IntSrteam intStream3 = IntStream.range(1, 10).map(n -> n+1); // 연산위주
+intStream3.forEach(n -> System.out.print(n + " "));
+System.out.println();
+
+// Sorting
+IntSream intStream4 = IntStream.builder().add(5).add(1).add(3).add(4).add(2).build();
+IntSream intStreamSort = intStream4.sorted(); // 정렬
+intStreamSort.forEach(System.out::println);
+```
+
+- 스트림 최종 연산 예시
+```java
+// Sum, Average
+int sum = IntSream.range(1, 5).sum();
+double average = IntStream.range(1, 5).average().getAsDouble();
+
+// Min, Max
+int min = IntStream.ranget(1, 5).min().getAsInt();
+int max = IntStream.ranget(1, 5).max().getAsInt();
+
+// reduce
+Stream<Integer> stream3 = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5));
+stream3.reduce((x,y)->x+y).get(); // 연쇄적인 연산 => 1+2. 3+3. 6+4. 10+5.
+
+// forEach
+IntSream.range(1, 10).filter(n -> n ==5 ).forEach(System.out::println);
+```
+- 예제
+```java
+// 예제: 1~10 숫자 중 짝수 들의 합
+int sum2 = IntStream.range(1, 11).filter(x -> x % 2 == 0).sum();
+```
+
+
+
+# 기초 수학
+
+- 집합
+- 경우의 수
+- 순열 / 조합
+- 점화식과 재귀함수
+- 지수와 로그
+- 알고리즘 복잡도 
+
+
+
+# 집합
+- 컬렉션 프레임워크 이용한 구현
+- 직접 구현
+
+## 집합의 개념
+- 집합(Set)
+- 특정 조건에 맞는 원소들의 모임
+### 집합 표현 방법
+- 원소 나열법 => A={1,2,3}, B={2,4,6}
+- 조건 제시법 => A={A|A는 정수, 1<=A<=3}, B={2B|B는 정수, 1<=B<=3}
+- 벤다이어 그램
+#### 교집합
+- 두 집합이 공통으로 포함하는 원소로 이루어진 집합
+#### 합집합
+- 어느 하나에라도 속하는 원소들을 모두 모은 집합
+#### 차집합
+- A(orB)에만 속하는 원소들의 집합
+#### 여집합
+- 전체집합(U) 중 A의 원소가 아닌 것들의 집합
+## 집합 사용 예시 코드
+```java
+//1. 자바에서 집합사용 - HashSet
+//2. 집합 연산
+//2-1. 교집합
+HashSet a = new HashSet(Arrays.asList(1,2,3,4,5));
+HashSet b = new HashSet(Arrays.asList(2,4,6,8,10));
+a.retainAll(b);// a교집합 b //[2, 4]
+//2-2. 합집합
+a.addAll(b); //a합집합 b[1,2,3,4,5,6,8,10]
+//2-3 차집합
+a.removeAll(b); //a차집합b[1,3,5]
+```
+
+# 경우의 수
+- 합의 법칙, 곱의 법칙을 구분하기
+- 경우의 수를 자바 프로그래밍으로 구현하기 
+## 경우의 수 개념
+- 어떤 사건에서 일어날 수 있는 경우의 가짓수
+```
+예시1) 동전을 던지는 사건 : 경우의 수 2
+예시2) 주사위를 던지는 사건 : 경우의 수 6
+- 사건 A가 일어날 경우의 수 : n(A)
+```
+
+## 합의 법칙 곱의 법칙
+- 주사위 예시 경우의 수
+- 최대공약수, 최소공배수
+- 최소공배수공식) lcm = numA * numB /gcd;
+
+### 합의 법칙 개념
+- 사건 A 또는 사건 B가 일어날 경우
+- 사건 A와 사건 B의 합의 법칙 : n(A ∪ B)
+- n(A ∪ B) = n(A) + n(B) - n(A∩B)
+```
+예시) 두 개의 주사위를 던졌을 때 합이 3 또는 4의 배수일 경우의 수
+```
+
+### 곱의 법칙 개념
+- 사건 A와 사건 B가 동시에 일어날 경우의 수
+- 사건 A와 사건 B의 곱의 법칙: n(A x B)
+- n(A x B) = n(A) x n(B)
+```
+예시) 두 개의 주사위 a, b를 던졌을 때 a는 3의 배수, b는 4의 배수인 경우의 수 
+```
+
+
+# 순열 / 조합
+- 팩토리얼 (반복문, Stream)
+- m개 숫자를 이용 n자리 자연수
+
+## 순열
+- 1. 팩토리얼
+- 2. 순열
+- 3. 중복 순열
+- 4. 원 순열
+
+### 팩토리얼
+- 1에서 n까지 모든 자연수의 곱(n!)
+
+### 순열(Permutation)
+- 순서를 정해서 나열
+- 서로 다른 n개 중에 r개를 선택하는 경우의 수 (순서 O, 중복 X)
+- 예시) 5명을 3줄로 세우는 방법
+- 예시) 서로 다른 4명 중 반장, 부반장 뽑는 방법. 
+- n! / (n-r)! ==> n부터 n-r+1까지의 곱.!!!
+
+### 중복 순열
+- 서로 다른 n개 중에 r개를 선택하는 경우의 수 (순서O, 중복 O)
+- 예시) 서로 다른 4개의 수 중 2개를 뽑는 방법(중복 허용)
+- 예시) 후보 2명, 유권자 3명일 때 기명 투표 방법. 
+- n^r
+
+### 원순열
+- 원 모양의 테이블에 n개의 원소를 나열하는 경우의 수
+- 예시) 원모양의 테이블에 3명을 앉히는 경우
+- n!/n = (n-1)!
+
+
+## 조합
+- 1. 조합
+- 2. 중복 조합 
+- 조합 개념의 이해와 경우의 수 계산
+- 프로그래밍으로 조합의 각 case 출력 
+
+### 조합(의 개념)
+- 서로 다른 n개 중에서 r개를 선택하는 경우의 수 (순서X, 중복X)
+- 예시) 서로 다른 4명 중 주번 2명을 뽑는 방법 (순열은 반장,부반장, <-> 조합은 주번)
+- nCr = n! / (n-r)!r! = nPr / r! (0 < r <= n)
+
+### 중복 조합
+- 서로 다른 n개 중에서 r개를 선택하는 경우의 수 (순서X, 중복O)
+- 예시) 후보 2명, 유권자 3명일 때 무기명 투표 방법
+- nHr = n+r-1 C r
+
+# 점화식과 재귀함수 
+- 점화식과 재귀함수 개념 이해
+- 점화식 유형을 파악하고 재귀함수로 구현 가능
+- 여러가지 점화식을 재귀함수로 구현
+- 최대공약수를 재귀함수로 구현
+
+## 점화식(Recurrence)
+- 어떤 수열의 일반항을 그 이전의 항들을 이용하여 정의한 식
+- 예시) 피보나치 수열. 
+
+## 재귀함수
+- 어떤 함수가 자신을 다시 호출하여 작업을 수행하는 방식
+```
+반환타입 함수이름 (매개변수){
+    종료조건
+    ...
+    함수이름(...)
+}
+```
+
+# 지수와 로그
+- 지수와 로그를 Math 클래스 사용한 구현
+- 직접 구현
+- 1. 제곱, 제곱근, 지수
+- 2. 로그
+## 제곱, 제곱근, 지수 개념
+- 제곱 : 같은 수를 두 번 곱함
+- 거듭 제곱 : 같은 수를 거듭하여(2번 이상) 곱함
+- 제곱근 (=root)
+- a를 제곱하여 b가 될 때 a를 b의 제곱근이라고 함
+```
+2^3 = 2 x 2 x 2
+4^1/2 = 2^2x1/2 = 2
+a^x -> a: 밑, x : 지수
+```
+- 자바 Math 클래스 활용
+```java
+// 2^3
+Math.pow(2, 3); // 8
+Math.pow(2, -3); // 1/2^3 == 1/8
+Math.pow(2, 30); // 1.073741824E9 //10의 9승
+//루트 16
+Math.sqrt(16);	//4
+Math.pow(16, 1.0/2); //4
+
+// cf)절대값 구하기
+Math.abs(-5) == Math.abs(5)
+```
+
+## 로그
+- log a b
+- a가 b가 되기 위해 제곱해야하는 수
+```
+log 2 4 = 2
+log 10 1000 = 3
+log e 2.718281828459... = 1  => (자연상수)
+``` 
+- 자바 Math 클래스 활용
+```java
+Math(E); // 자연상수 == 2.718281828459045
+Math.log(2.718281828459045); // 1.0
+Math.log10(1000); // 3
+//log 2 4 계산하기(밑이 다른 로그)
+Math.log(4) / Math.log(2) // 2.0  
+
+
+```
+
+# 알고리즘 복잡도
+- 시간복잡도, 공간복잡도 개념 이해
+- 빅오 표기법 이해와 코드에 대한 복잡도 산출 가능 
+- 시간 복잡도 예시 코드
+- 공간 복잡도 예시 코드 
+
+## 복잡도
+- 알고리즘 성능을 나타내는 척도
+- 시간 복잡도 : 알고리즘의 필요 연산 횟수
+- 공간 복잡도 : 알고리즘의 필요 메모리
+- 시간 복잡도와 공간 복잡도는 Trade-off 관계 
+
+## 시간 복잡도
+- 어떤 분제를 해결하기 위한 알고리즘의 필요 연산 횟수
+- 빅오 표기법을 통해 나타냄
+- O(1) < O(logN) < O(N) < O(NlogN) < O(N^2) < O(2^n) 
+- 상수시간<로그시간 < 선형시간 < 로그선형시간< 이차시간 < 지수시간 
+
+## 공간 복잡도
+- 어떤 문제를 해결하기 위한 알고리즘의 필요 메모리 사용량
+- 빅오 표기법을 통해 나타냄
+- 일반적으로 메모리 사용량 기준은 MB 단위
+```java
+int[] a = new int[1000]; //4KB
+int[][] a = new int[1000][1000]; //4MB
+```
+
+
+
+
+
+
+
+
+
